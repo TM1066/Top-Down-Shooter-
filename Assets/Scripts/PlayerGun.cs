@@ -1,22 +1,27 @@
+using System.Collections;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class PlayerGun : MonoBehaviour
 {
     public float shootPower;
+    public float shotCooldown = 1;
     public Rigidbody2D playerBodyRig;
 
     public Transform projectileSpawnPoint;
     public GameObject projectilePrefab;
 
+    private bool canShoot = true;
+    private bool followingMouse = true;
+
     // Update is called once per frame
     void Update()
     {
-        HandleMovement();
-        HandleShooting();
+        if (followingMouse){ FollowMouse(); }
+        StartCoroutine(HandleShooting());
     }
 
-    private void HandleMovement()
+    private void FollowMouse()
     {
         // float rotationValue = Random.Range(0f, 360f);
         // this.transform.rotation = Quaternion.Euler(0, 0, rotationValue);
@@ -38,22 +43,37 @@ public class PlayerGun : MonoBehaviour
     }
 
     //can make an IEnumerator or just incorporate a stopwatch and compare ticks to slow fire rate
-    private void HandleShooting()
+    private IEnumerator HandleShooting()
     {
-        if (Input.GetMouseButtonDown(1))
+        while (true)
         {
-            //calculating the direction away from player, using negative for kickback force
-            Vector2 direction = (playerBodyRig.transform.position - projectileSpawnPoint.position).normalized;
-
-            for (int i = 0; i < 5; i++)
+            if (Input.GetMouseButtonDown(1) && canShoot)
             {
-                Debug.Log("Shooting Projectile!!!!!!! BOMBS AWAY");
-                var projectile = Instantiate(projectilePrefab, projectileSpawnPoint);
-                projectile.transform.SetParent(null);
-                projectile.GetComponent<Rigidbody2D>().AddForce(shootPower * ( -direction + new Vector2(Random.Range(0f, 5f),Random.Range(0f, 5f))), ForceMode2D.Impulse);
+                ShotGunFire();
+
+                canShoot = false;
+                followingMouse = false;
+                yield return new WaitForSeconds(shotCooldown);
+                canShoot = true;
+                followingMouse = true;
             }
-            // Push the Player away from the barrel shooting
-            playerBodyRig.AddForce(shootPower * direction, ForceMode2D.Impulse);
+            yield return null;
         }
+    }
+
+    private void ShotGunFire()
+    {
+        //calculating the direction away from player, using negative for kickback force
+        Vector2 direction = (playerBodyRig.transform.position - projectileSpawnPoint.position).normalized;
+
+        for (int i = 0; i < 5; i++)
+        {
+            Debug.Log("Shooting Projectile!!!!!!! BOMBS AWAY");
+            var projectile = Instantiate(projectilePrefab, projectileSpawnPoint);
+            projectile.transform.SetParent(null);
+            projectile.GetComponent<Rigidbody2D>().AddForce(shootPower * (-direction + new Vector2(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f))), ForceMode2D.Impulse);
+        }
+        // Push the Player away from the barrel shooting - might need to offset kindaaa not working
+        playerBodyRig.AddForce(shootPower * direction, ForceMode2D.Impulse);
     }
 }

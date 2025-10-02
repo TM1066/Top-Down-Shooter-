@@ -5,6 +5,7 @@ public class Projectile : MonoBehaviour
 {
     public float lifeTime = 4;
     public float startSize = 1;
+    public GameObject shooterObject;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -27,5 +28,17 @@ public class Projectile : MonoBehaviour
             }
         }
         Destroy(this.gameObject);
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        //Code to handle removing player health (Scale with size)
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            collision.gameObject.GetComponent<Player>().health -= 5 * this.transform.localScale.x;
+            Debug.Log($"Player Shot for {5 * this.transform.localScale.x} damage");
+        }
+
+        //Destroy(this.gameObject);
     }
 }
