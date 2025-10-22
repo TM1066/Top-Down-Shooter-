@@ -68,12 +68,17 @@ public class PlayerGun : MonoBehaviour
 
         for (int i = 0; i < 5; i++)
         {
-            Debug.Log("Shooting Projectile!!!!!!! BOMBS AWAY");
+            Debug.Log("Shooting Projectile!!!!!!!");
             var projectile = Instantiate(projectilePrefab, projectileSpawnPoint);
             projectile.transform.SetParent(null);
             projectile.GetComponent<Rigidbody2D>().AddForce(shootPower * (-direction + new Vector2(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f))), ForceMode2D.Impulse);
         }
         // Push the Player away from the barrel shooting - might need to offset kindaaa not working
         playerBodyRig.AddForce(shootPower * direction, ForceMode2D.Impulse);
+
+        //delay camera following player
+        GlobalVariables.cameraFollowingPlayer = false;
+
+        FindAnyObjectByType<Player>().DelayCameraFollowingPlayer(shotCooldown / 2, shotCooldown / 2);
     }
 }

@@ -32,12 +32,18 @@ public class Projectile : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        //Code to handle removing player health (Scale with size)
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            collision.gameObject.GetComponent<Player>().health -= 5 * this.transform.localScale.x;
-            Debug.Log($"Player Shot for {5 * this.transform.localScale.x} damage");
-        }
+        //Code to handle removing player health (Scale with size) - Only for Multiplayer
+        // if (collision.gameObject.CompareTag("Player"))
+        // {
+        //     collision.gameObject.GetComponent<Player>().health -= 5 * this.transform.localScale.x;
+        //     Debug.Log($"Player Shot for {5 * this.transform.localScale.x} damage");
+        // }
+
+        Destroy(this.gameObject);
+
+
+
+
 
         //Destroy(this.gameObject);
     }
