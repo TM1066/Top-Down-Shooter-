@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerGun : MonoBehaviour
 {
@@ -13,6 +14,15 @@ public class PlayerGun : MonoBehaviour
 
     private bool canShoot = true;
     private bool followingMouse = true;
+
+    [SerializeField] InputActionAsset inputActionAsset;
+    private InputAction fireAction;
+
+    void Start()
+    {
+        var playerActionMap = inputActionAsset.FindActionMap("Player");
+        fireAction = playerActionMap.FindAction("Fire");
+    }
 
     // Update is called once per frame
     void Update()
@@ -47,7 +57,7 @@ public class PlayerGun : MonoBehaviour
     {
         while (true)
         {
-            if (Input.GetMouseButtonDown(1) && canShoot)
+            if (fireAction.triggered && canShoot)
             {
                 ShotGunFire();
 
@@ -66,7 +76,7 @@ public class PlayerGun : MonoBehaviour
         //calculating the direction away from player, using negative for kickback force
         Vector2 direction = (playerBodyRig.transform.position - projectileSpawnPoint.position).normalized;
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < Random.Range(5, 15); i++)
         {
             Debug.Log("Shooting Projectile!!!!!!!");
             var projectile = Instantiate(projectilePrefab, projectileSpawnPoint);

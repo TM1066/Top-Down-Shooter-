@@ -563,7 +563,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28b88e86c89312947b285305024b0b3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootPower: 25
+  shootPower: 0
   shotCooldown: 1
   playerBodyRig: {fileID: 1520663551}
   projectileSpawnPoint: {fileID: 2105863345}
@@ -1273,8 +1273,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4935974ff0b24a48b8dffe027fc8276, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  speedValue: 75.1
-  playerRig: {fileID: 1520663551}
+  speedValue: 25
   inputActionAsset: {fileID: -944628639613478452, guid: 9ffdd02f432c1a845b384feb6211d4d1, type: 3}
 --- !u!1 &1639625122
 GameObject:
